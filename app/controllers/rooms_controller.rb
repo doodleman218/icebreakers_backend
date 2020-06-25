@@ -19,6 +19,15 @@ class RoomsController < ApplicationController
     else
       render json: { errors: user.errors.messages }, status: :not_acceptable
     end
+
+    if room.save
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+        RoomSerializer.new(room)
+      ).serializable_hash
+      ActionCable.server.broadcast 'rooms_channel', serialized_data
+      head :ok
+    end
+
   end
 
   
