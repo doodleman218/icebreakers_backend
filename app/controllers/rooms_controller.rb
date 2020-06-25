@@ -1,5 +1,6 @@
 require "jwt"
 
+
 class RoomsController < ApplicationController 
 
   def new
