@@ -8,17 +8,26 @@ class RoomsController < ApplicationController
   end
   
   def create
-    room = Room.create({"room_name" => room_params[:room_name], "password" => room_params[:password]})
     user = User.create({"username" => params[:username]})
+    room = Room.create({"room_name" => room_params[:room_name], "password" => room_params[:password], "host_id" => user.id})
     join = UserRoom.create({"user_id" => user.id, "room_id" => room.id})
     if room.valid?
-      room.host_id = user.id
       payload = {room_id: room.id}
       token = JWT.encode(payload, "hmac_secret", 'HS256') 
       render json: { room: room, jwt: token }, status: :created
+      
     else
       render json: { errors: user.errors.messages }, status: :not_acceptable
     end
+  end
+
+  
+  def destroy
+    # p params "++++++++++++"
+    # destroy user
+    room = Room.find(params[:id])
+    render json: "success"
+    room.destroy
   end
 
 
