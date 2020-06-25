@@ -2,13 +2,13 @@ class UsersController < ApplicationController
 
 
   def create
-    user = User.create(user_params)
+    user = User.new(user_params)
 
     if user.save
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
         UserSerializer.new(user)
       ).serializable_hash
-      UserssChannel.broadcast_to room, serialized_data
+      UsersChannel.broadcast_to room, serialized_data
       head :ok
     end
 
