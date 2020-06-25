@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :rooms, only: [:index, :show, :new, :create]
   resources :questions, only: [:index, :show]
 
+  post '/', to: 'room_auth#create'
+
   mount ActionCable.server => '/cable'
 
 end
