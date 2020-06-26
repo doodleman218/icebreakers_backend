@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   post '/', to: 'room_auth#create'
 
+  get '/sockets', to: 
+
   mount ActionCable.server => '/cable'
 
 end
