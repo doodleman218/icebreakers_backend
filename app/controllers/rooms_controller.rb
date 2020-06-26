@@ -10,7 +10,7 @@ class RoomsController < ApplicationController
   
   def create
     user = User.create({"username" => params[:username]})
-    room = Room.create({"room_name" => room_params[:room_name], "password" => room_params[:password], "host_id" => user.id})
+    room = Room.create!({"room_name" => room_params[:room_name], "password" => room_params[:password], "host_id" => user.id})
     join = UserRoom.create({"user_id" => user.id, "room_id" => room.id})
     if room
   
@@ -49,7 +49,7 @@ class RoomsController < ApplicationController
   private
 
   def room_params
-    params.require(:room).permit(:room_name, :password)
+    params.require(:room).permit(:room_name, :password, :username)
   end
 
   # def user_params
