@@ -16,30 +16,24 @@ class RoomsController < ApplicationController
   
       payload = {room_id: room.id}
       token = JWT.encode(payload, "hmac_secret", 'HS256') 
-      # render json: { room: room, jwt: token }, status: :created
+      render json: { room: room, jwt: token }, status: :created
+        
+    else
+      render json: { errors: user.errors.messages }, status: :not_acceptable
+    end
 
+  
+
+  end
+
+  def socket
+     
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
         RoomSerializer.new(room)
       ).serializable_hash
       ActionCable.server.broadcast 'rooms_channel', serialized_data
       head :ok
-            
-    else
-      render json: { errors: user.errors.messages }, status: :not_acceptable
-    end
-
-    # if room.save
-    #   serialized_data = ActiveModelSerializers::Adapter::Json.new(
-    #     RoomSerializer.new(room)
-    #   ).serializable_hash
-    #   ActionCable.server.broadcast 'rooms_channel', serialized_data
-    #   head :ok
-    # end
-
-  end
-
-  def socket
-
+ 
   end
 
   
