@@ -9,6 +9,6 @@ Rails.application.routes.draw do
 
   get '/socket', to: 'rooms#socket'
 
-  mount ActionCable.server => '/cable'
+  mount ActionCableConsumer.server => '/cable'
 
 end

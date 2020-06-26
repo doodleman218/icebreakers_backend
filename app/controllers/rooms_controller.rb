@@ -28,11 +28,11 @@ class RoomsController < ApplicationController
 
   def socket
      
-      serialized_data = ActiveModelSerializers::Adapter::Json.new(
-        RoomSerializer.new(room)
-      ).serializable_hash
-      ActionCable.server.broadcast 'rooms_channel', serialized_data
-      head :ok
+      # serialized_data = ActiveModelSerializers::Adapter::Json.new(
+      #   RoomSerializer.new(room)
+      # ).serializable_hash
+      # ActionCableConsumer.server.broadcast 'rooms_channel', serialized_data
+      # head :ok
  
   end
 
