@@ -33,7 +33,7 @@ class RoomsController < ApplicationController
       #   RoomSerializer.new(room)
       # ).serializable_hash
       # ActionCableConsumer.server.broadcast 'rooms_channel', serialized_data
-      # head :ok
+      # headd :ok
  
   end
 
