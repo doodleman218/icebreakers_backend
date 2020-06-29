@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   end
 
   def test
+    p params
     users = User.all
     room = Room.find(user_params[:room])
     UsersChannel.broadcast_to room, users

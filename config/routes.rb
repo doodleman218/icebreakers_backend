@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   post '/', to: 'room_auth#create'
 
-  post '/test', to: 'users#test'
+  post '/users/test', to: 'users#test'
 
   get '/socket', to: 'rooms#socket'
 

@@ -53,10 +53,10 @@ class RoomsController < ApplicationController
     params.require(:room).permit(:room_name, :password, :username)
   end
 
-  def user_params
-    params.require(:user).permit(:username)
-    # why this no work
-  end
+  # def user_params
+  #   params.require(:user).permit(:username)
+  #   # why this no work
+  # end
 
 
 
