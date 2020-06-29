@@ -3,13 +3,17 @@ class UsersController < ApplicationController
 
   def index
     users = User.all
-    render json: users
+    # render json: users
+  end
+
+  def test
+    users = User.all
+    room = Room.find(user_params[:room])
+    UsersChannel.broadcast_to room, users
   end
 
   def create
     user = User.new(user_params)
-    
-
   end
 
 
@@ -22,7 +26,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:username).permit(:username, :id)
+    params.require(:user).permit(:username, :id, :room)
   end
 
 end
