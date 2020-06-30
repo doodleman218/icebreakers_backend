@@ -10,7 +10,7 @@ class RoomsController < ApplicationController
   
   def create
     p params
-    user = User.create({"username" => room_params[:username]})
+    user = User.create({"username" => room_params[:username], :is_active => true})
     room = Room.create!({"room_name" => room_params[:room_name], "password" => room_params[:password], "host_id" => user.id})
     join = UserRoom.create({"user_id" => user.id, "room_id" => room.id})
     if room
@@ -27,16 +27,6 @@ class RoomsController < ApplicationController
 
   end
 
-  def socket
-     
-      # serialized_data = ActiveModelSerializers::Adapter::Json.new(
-      #   RoomSerializer.new(room)
-      # ).serializable_hash
-      # ActionCableConsumer.server.broadcast 'rooms_channel', serialized_data
-      # headd :ok
- 
-  end
-
   
   def destroy
     # p params "++++++++++++"
@@ -50,7 +40,7 @@ class RoomsController < ApplicationController
   private
 
   def room_params
-    params.require(:room).permit(:room_name, :password, :username)
+    params.require(:room).permit(:room_name, :password, :username, :is_active)
   end
 
   # def user_params

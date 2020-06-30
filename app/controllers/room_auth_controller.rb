@@ -8,7 +8,7 @@ class RoomAuthController < ApplicationController
     room = Room.find_by(room_name: params[:room_name])
     if room && room.authenticate(params[:password])
     # 
-      user = User.create({"username" => params[:username]})
+      user = User.create({"username" => params[:username], :is_active => true})
       join = UserRoom.create({"user_id" => user.id, "room_id" => room.id})
       payload = {room_id: room.id}
       token = JWT.encode(payload, "hmac_secret", 'HS256')

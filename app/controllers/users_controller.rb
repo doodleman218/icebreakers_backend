@@ -17,10 +17,13 @@ class UsersController < ApplicationController
     user = User.new(user_params)
   end
 
-
-
   def show 
     user = User.find(user_params[:id])
+  end
+
+  
+  def select
+
   end
 
 

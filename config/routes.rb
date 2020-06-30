@@ -9,7 +9,8 @@ Rails.application.routes.draw do
 
   post '/users/test', to: 'users#test'
 
-  get '/socket', to: 'rooms#socket'
+  patch '/users/select', to: 'users#select'
+
 
   mount ActionCable.server => '/cable'
 

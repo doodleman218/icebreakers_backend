@@ -16,8 +16,8 @@ Question.create(content:["what was your first job?", "what was the story behind 
 
 # RoomQuestion.create(room_id: Room.find_by(name: "Party").id, question_id: )
 
-Room.create(room_name:"Party", password:"xxx")
-User.create(username:"David")
+# Room.create(room_name:"Party", password:"xxx")
+# User.create(username:"David")
 
-UserRoom.create(user_id: User.find_by(username: "David").id, room_id: Room.find_by(room_name: "Party").id)
+# UserRoom.create(user_id: User.find_by(username: "David").id, room_id: Room.find_by(room_name: "Party").id)
 
