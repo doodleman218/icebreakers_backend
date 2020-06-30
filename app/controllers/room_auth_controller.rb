@@ -7,7 +7,7 @@ class RoomAuthController < ApplicationController
   def create
     room = Room.find_by(room_name: params[:room_name])
     if room && room.authenticate(params[:password])
-    
+    # 
       user = User.create({"username" => params[:username]})
       join = UserRoom.create({"user_id" => user.id, "room_id" => room.id})
       payload = {room_id: room.id}
