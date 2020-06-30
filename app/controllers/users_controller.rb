@@ -7,8 +7,8 @@ class UsersController < ApplicationController
   end
 
   def test
-    p params
-    users = User.all
+    # users being broadcasted out
+    users = User.all 
     room = Room.find(user_params[:room])
     UsersChannel.broadcast_to room, users
   end
@@ -23,14 +23,17 @@ class UsersController < ApplicationController
 
   
   def select
-
+    updatePlayer = User.find(user_params[:currentPlayer])
+      updatePlayer.update(is_active: false)
+    room = Room.find(user_params[:room])
+    UsersChannel.broadcast_to room, ...
   end
 
 
   private
 
   def user_params
-    params.require(:user).permit(:username, :id, :room)
+    params.require(:user).permit(:username, :id, :room, :currentPlayer)
   end
 
 end
