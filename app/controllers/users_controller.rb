@@ -22,11 +22,16 @@ class UsersController < ApplicationController
   end
 
   
-  def select
-    updatePlayer = User.find(user_params[:currentPlayer])
-      updatePlayer.update(is_active: false)
+  def update
+    p "=========================="
+    p params
+    updateUser = User.find_by(username: user_params[:currentPlayer])
+    updateUser.update(is_active: false)
     room = Room.find(user_params[:room])
-    UsersChannel.broadcast_to room, ...
+    userArray = room.users.select { |roomObj| roomObj.is_active === true }
+    currentPlayer = userArray.sample(1)
+    p currentPlayer
+    UsersChannel.broadcast_to room, currentPlayer
   end
 
 
@@ -46,4 +51,11 @@ end
     #   ).serializable_hash
     #   UsersChannel.broadcast_to room, serialized_data
     #   head :ok
+    # end
+
+    # userArray = room.users.select do |roomObj|
+    #   byebug
+    #   if roomObj.is_active === true
+    #     return roomObj
+    #   end
     # end
