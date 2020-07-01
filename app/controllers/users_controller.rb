@@ -22,14 +22,23 @@ class UsersController < ApplicationController
   end
 
   
-  def update
+  def select
     p "=========================="
     p params
+    byebug
     updateUser = User.find_by(username: user_params[:currentPlayer])
     updateUser.update(is_active: false)
     room = Room.find(user_params[:room])
     userArray = room.users.select { |roomObj| roomObj.is_active === true }
-    currentPlayer = userArray.sample(1)
+    currentPlayer = userArray.sample(1).first
+    p currentPlayer
+    UsersChannel.broadcast_to room, currentPlayer
+  end
+
+  def start
+    room = Room.find(user_params[:room])
+    userArray = room.users.select { |roomObj| roomObj.is_active === true }
+    currentPlayer = userArray.sample(1).first
     p currentPlayer
     UsersChannel.broadcast_to room, currentPlayer
   end
