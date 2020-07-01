@@ -11,8 +11,9 @@ class RoomsController < ApplicationController
   def create
     p params
     user = User.create({"username" => room_params[:username], :is_active => true})
-    room = Room.create!({"room_name" => room_params[:room_name], "password" => room_params[:password], "host_id" => user.id})
+    room = Room.create({"room_name" => room_params[:room_name], "password" => room_params[:password], "host_id" => user.id, :game_started => false})
     join = UserRoom.create({"user_id" => user.id, "room_id" => room.id})
+    # question = Question.all.map {|questionObj| RoomQuestions.create({room_id: room.id, question_id: questionObj.id, is_active: true})}
     if room
   
       payload = {room_id: room.id}

@@ -25,7 +25,6 @@ class UsersController < ApplicationController
   def select
     p "=========================="
     p params
-    byebug
     updateUser = User.find_by(username: user_params[:currentPlayer])
     updateUser.update(is_active: false)
     room = Room.find(user_params[:room])
@@ -37,6 +36,7 @@ class UsersController < ApplicationController
 
   def start
     room = Room.find(user_params[:room])
+    room.update(game_started: true)
     userArray = room.users.select { |roomObj| roomObj.is_active === true }
     currentPlayer = userArray.sample(1).first
     p currentPlayer

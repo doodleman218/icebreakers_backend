@@ -12,9 +12,9 @@ User.destroy_all
 UserRoom.destroy_all
 
 
-Question.create(content:"what was your first job?", is_active: true)
-Question.create(content:"what was the story behind your first kiss?", is_active: true)
-Question.create(content:"what was an embarrasing memomry from gradeschool you still think about?", is_active: true)
+Question.create(content:"what was your first job?")
+Question.create(content:"what was the story behind your first kiss?")
+Question.create(content:"what was an embarrasing memomry from gradeschool you still think about?")
 
 # RoomQuestion.create(room_id: Room.find_by(name: "Party").id, question_id: )
 
