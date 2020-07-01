@@ -27,11 +27,16 @@ class UsersController < ApplicationController
     p params
     updateUser = User.find_by(username: user_params[:currentPlayer])
     updateUser.update(is_active: false)
+    updateQuestion = RoomQuestion.find_by(question_id: question_params[:id])
+    updateQuestion.update(is_active: false)
     room = Room.find(user_params[:room])
     userArray = room.users.select { |roomObj| roomObj.is_active === true }
     currentPlayer = userArray.sample(1).first
+    questionArray = RoomQuestion.all.select { |roomObj| roomObj.is_active === true }
+    questionID = questionArray.sample(1).first.question_id
+    currentQuestion = Question.all.find(questionID)
     p currentPlayer
-    UsersChannel.broadcast_to room, currentPlayer
+    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion }
   end
 
   def start
@@ -39,15 +44,22 @@ class UsersController < ApplicationController
     room.update(game_started: true)
     userArray = room.users.select { |roomObj| roomObj.is_active === true }
     currentPlayer = userArray.sample(1).first
+    questionArray = RoomQuestion.all.select { |roomObj| roomObj.is_active === true }
+    questionID = questionArray.sample(1).first.question_id
+    currentQuestion = Question.all.find(questionID)
     p currentPlayer
-    UsersChannel.broadcast_to room, currentPlayer
+    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion }
   end
 
 
   private
 
   def user_params
-    params.require(:user).permit(:username, :id, :room, :currentPlayer)
+    params.require(:user).permit(:username, :id, :room, :currentPlayer, :currentQuestion)
+  end
+
+  def question_params
+    params.require(:question).permit(:id)
   end
 
 end
