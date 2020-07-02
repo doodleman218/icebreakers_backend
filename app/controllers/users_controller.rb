@@ -32,18 +32,21 @@ class UsersController < ApplicationController
     updateUser.update(is_active: false)
     updateQuestion = room.room_questions.find_by(question_id: question_params[:id])
     updateQuestion.update(is_active: false)
-    userArray = room.users.select { |userObj| userObj.is_active === true }
+    userArray = room.users.select { |userObj| userObj.is_active == true }
     
-    # if userArray.length === 0 
-      
+    # if userArray.length === 0  
     #   room.users.map { |userObj| userObj.is_active = true } 
     #   userArray = room.users
-      
     #   # make reshuffling variable, toggle in here
     # end
     
     currentPlayer = userArray.sample(1).first
-    questionArray = room.room_questions.all.select { |userObj| userObj.is_active === true }
+    questionArray = room.room_questions.all.select { |userObj| userObj.is_active == true }
+    
+    # if questionArray.length === 0
+
+    # end
+    
     questionID = questionArray.sample(1).first.question_id
     currentQuestion = Question.all.find(questionID)
   
@@ -53,9 +56,9 @@ class UsersController < ApplicationController
   def start
     room = Room.find(user_params[:room])
     room.update(game_started: true)
-    userArray = room.users.select { |roomObj| roomObj.is_active === true }
+    userArray = room.users.select { |roomObj| roomObj.is_active == true }
     currentPlayer = userArray.sample(1).first
-    questionArray = RoomQuestion.all.select { |roomObj| roomObj.is_active === true }
+    questionArray = RoomQuestion.all.select { |roomObj| roomObj.is_active == true }
     questionID = questionArray.sample(1).first.question_id
     currentQuestion = Question.all.find(questionID)
     p currentPlayer
