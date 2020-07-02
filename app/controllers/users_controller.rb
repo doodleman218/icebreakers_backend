@@ -25,20 +25,29 @@ class UsersController < ApplicationController
   def select
     p "=========================="
     p params
-    reshuffling_users = false
+    reshufflingUsers = false
+    room = Room.find(user_params[:room])
+    
     updateUser = User.find_by(username: user_params[:currentPlayer])
     updateUser.update(is_active: false)
-    room = Room.find(user_params[:room])
     updateQuestion = room.room_questions.find_by(question_id: question_params[:id])
     updateQuestion.update(is_active: false)
-    userArray = room.users.select { |roomObj| roomObj.is_active === true }
-    # if user array i length === 0 map users is active is true, make reshuffling variable, toggle in here
+    userArray = room.users.select { |userObj| userObj.is_active === true }
+    
+    # if userArray.length === 0 
+      
+    #   room.users.map { |userObj| userObj.is_active = true } 
+    #   userArray = room.users
+      
+    #   # make reshuffling variable, toggle in here
+    # end
+    
     currentPlayer = userArray.sample(1).first
-    questionArray = room.room_questions.all.select { |roomObj| roomObj.is_active === true }
+    questionArray = room.room_questions.all.select { |userObj| userObj.is_active === true }
     questionID = questionArray.sample(1).first.question_id
     currentQuestion = Question.all.find(questionID)
   
-    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, reshuffling_users: reshuffling_users }
+    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, reshufflingUsers: reshufflingUsers }
   end
 
   def start
@@ -57,7 +66,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:username, :id, :room, :currentPlayer, :currentQuestion)
+    params.require(:user).permit(:username, :id, :room, :currentPlayer, :currentQuestion, :reshufflingUsers)
   end
 
   def question_params
