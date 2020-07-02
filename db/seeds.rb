@@ -7,6 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 Question.destroy_all
+RoomQuestion.destroy_all
 Room.destroy_all
 User.destroy_all
 UserRoom.destroy_all
@@ -15,6 +16,8 @@ UserRoom.destroy_all
 Question.create(content:"what was your first job?")
 Question.create(content:"what was the story behind your first kiss?")
 Question.create(content:"what was an embarrasing memomry from gradeschool you still think about?")
+Question.create(content:"what is your earliet memory?")
+Question.create(content:"who was your first celebrity crush?")
 
 # RoomQuestion.create(room_id: Room.find_by(name: "Party").id, question_id: )
 
