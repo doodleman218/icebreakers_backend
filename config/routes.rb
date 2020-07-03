@@ -11,8 +11,6 @@ Rails.application.routes.draw do
 
   post '/users/test', to: 'users#test'
 
-
-
   mount ActionCable.server => '/cable'
 
 end

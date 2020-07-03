@@ -34,45 +34,29 @@ class UsersController < ApplicationController
     updateQuestion.update(is_active: false)
     userArray = room.users.select { |userObj| userObj.is_active === true }
     
-    # p "*************************"
-    # p userArray
-    # p "%%%%%%%%%%%%%%%%%%%%%%%%"
-    # p reshufflingUsers
-    
-byebug
     if userArray.length === 0  
-      room.users.map { |userObj| userObj.is_active = true } 
+      room.users.map { |userObj| userObj.update(is_active: true) } 
       userArray = room.users
       reshufflingUsers = true
       # p "%%%%%%%%%%%%%%%%%%%%%%%%"
       # p "INSIDE"
     end
-    
-    # p "%%%%%%%%%%%%%%%%%%%%%%%%"
-    # p reshufflingUsers
-
-    # p "%%%%%%%%%%%%%%%%%%%%%%%%"
-    # p userArray
 
     currentPlayer = userArray.sample(1).first
     questionArray = room.room_questions.all.select { |userObj| userObj.is_active === true }
-    
-    #p "*************************"
-    #p questionArray
-    
+    p "**************************************"
+    p questionArray
     # if questionArray.length === 0
     #   room.room_questions.map { |questionObj| questionObj.is_active = true }
     #   questionArray = room.room_questions
     #   # make reshuffling variable, toggle in here
     # end
 
-    # p "%%%%%%%%%%%%%%%%%%%%%%%%"
-    #p questionArray
-    
     questionID = questionArray.sample(1).first.question_id
-    currentQuestion = Question.all.find(questionID)
-  
+    currentQuestion = Question.find(questionID)
+    p "ABOVE &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
     UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, reshufflingUsers: reshufflingUsers }
+    p "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
   end
 
   def start
