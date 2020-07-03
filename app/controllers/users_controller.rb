@@ -23,29 +23,51 @@ class UsersController < ApplicationController
 
   
   def select
-    p "=========================="
-    p params
+    #p "=========================="
+    #p params
     reshufflingUsers = false
     room = Room.find(user_params[:room])
     
-    updateUser = User.find_by(username: user_params[:currentPlayer])
+    updateUser = room.users.find_by(username: user_params[:currentPlayer])
     updateUser.update(is_active: false)
     updateQuestion = room.room_questions.find_by(question_id: question_params[:id])
     updateQuestion.update(is_active: false)
-    userArray = room.users.select { |userObj| userObj.is_active == true }
+    userArray = room.users.select { |userObj| userObj.is_active === true }
     
-    # if userArray.length === 0  
-    #   room.users.map { |userObj| userObj.is_active = true } 
-    #   userArray = room.users
-    #   # make reshuffling variable, toggle in here
-    # end
+    # p "*************************"
+    # p userArray
+    # p "%%%%%%%%%%%%%%%%%%%%%%%%"
+    # p reshufflingUsers
     
+byebug
+    if userArray.length === 0  
+      room.users.map { |userObj| userObj.is_active = true } 
+      userArray = room.users
+      reshufflingUsers = true
+      # p "%%%%%%%%%%%%%%%%%%%%%%%%"
+      # p "INSIDE"
+    end
+    
+    # p "%%%%%%%%%%%%%%%%%%%%%%%%"
+    # p reshufflingUsers
+
+    # p "%%%%%%%%%%%%%%%%%%%%%%%%"
+    # p userArray
+
     currentPlayer = userArray.sample(1).first
-    questionArray = room.room_questions.all.select { |userObj| userObj.is_active == true }
+    questionArray = room.room_questions.all.select { |userObj| userObj.is_active === true }
+    
+    #p "*************************"
+    #p questionArray
     
     # if questionArray.length === 0
-
+    #   room.room_questions.map { |questionObj| questionObj.is_active = true }
+    #   questionArray = room.room_questions
+    #   # make reshuffling variable, toggle in here
     # end
+
+    # p "%%%%%%%%%%%%%%%%%%%%%%%%"
+    #p questionArray
     
     questionID = questionArray.sample(1).first.question_id
     currentQuestion = Question.all.find(questionID)
@@ -56,9 +78,9 @@ class UsersController < ApplicationController
   def start
     room = Room.find(user_params[:room])
     room.update(game_started: true)
-    userArray = room.users.select { |roomObj| roomObj.is_active == true }
+    userArray = room.users.select { |roomObj| roomObj.is_active === true }
     currentPlayer = userArray.sample(1).first
-    questionArray = RoomQuestion.all.select { |roomObj| roomObj.is_active == true }
+    questionArray = room.room_questions.select { |roomObj| roomObj.is_active === true }
     questionID = questionArray.sample(1).first.question_id
     currentQuestion = Question.all.find(questionID)
     p currentPlayer
