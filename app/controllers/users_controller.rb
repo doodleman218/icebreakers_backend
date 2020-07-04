@@ -23,9 +23,8 @@ class UsersController < ApplicationController
 
   
   def select
-    #p "=========================="
-    #p params
     reshufflingUsers = false
+    reshufflingQuestions = false
     room = Room.find(user_params[:room])
     
     updateUser = room.users.find_by(username: user_params[:currentPlayer])
@@ -38,25 +37,23 @@ class UsersController < ApplicationController
       room.users.map { |userObj| userObj.update(is_active: true) } 
       userArray = room.users
       reshufflingUsers = true
-      # p "%%%%%%%%%%%%%%%%%%%%%%%%"
-      # p "INSIDE"
+     
     end
 
     currentPlayer = userArray.sample(1).first
     questionArray = room.room_questions.all.select { |userObj| userObj.is_active === true }
-    p "**************************************"
-    p questionArray
-    # if questionArray.length === 0
-    #   room.room_questions.map { |questionObj| questionObj.is_active = true }
-    #   questionArray = room.room_questions
-    #   # make reshuffling variable, toggle in here
-    # end
+  
+    if questionArray.length === 0
+      room.room_questions.map { |questionObj| questionObj.update(is_active: true) }
+      questionArray = room.room_questions
+      reshufflingQuestions = true
+    end
 
     questionID = questionArray.sample(1).first.question_id
     currentQuestion = Question.find(questionID)
-    p "ABOVE &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, reshufflingUsers: reshufflingUsers }
-    p "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+   
+    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, reshufflingUsers: reshufflingUsers, reshufflingQuestions: reshufflingQuestions }
+   
   end
 
   def start
