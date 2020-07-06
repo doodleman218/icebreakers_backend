@@ -2,15 +2,16 @@ class UsersController < ApplicationController
 
 
   def index
-    users = User.all
-    render json: users
+    allUsers = User.all
+    room = Room.find(user_params[:room])
+    UsersChannel.broadcast_to room, {allUsers: allUsers}
   end
 
   def test
     # users being broadcasted out
     users = User.all 
     room = Room.find(user_params[:room])
-    UsersChannel.broadcast_to room, users
+    # UsersChannel.broadcast_to room, users
   end
 
   def create
@@ -26,6 +27,7 @@ class UsersController < ApplicationController
     reshufflingUsers = false
     reshufflingQuestions = false
     room = Room.find(user_params[:room])
+    allUsers = room.users.all
     
     updateUser = room.users.find_by(username: user_params[:currentPlayer])
     updateUser.update(is_active: false)
@@ -52,12 +54,13 @@ class UsersController < ApplicationController
     questionID = questionArray.sample(1).first.question_id
     currentQuestion = Question.find(questionID)
    
-    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, reshufflingUsers: reshufflingUsers, reshufflingQuestions: reshufflingQuestions }
+    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, reshufflingUsers: reshufflingUsers, reshufflingQuestions: reshufflingQuestions, allUsers: allUsers }
    
   end
 
   def start
     room = Room.find(user_params[:room])
+    allUsers = room.users.all
     room.update(game_started: true)
     userArray = room.users.select { |roomObj| roomObj.is_active === true }
     currentPlayer = userArray.sample(1).first
@@ -65,7 +68,7 @@ class UsersController < ApplicationController
     questionID = questionArray.sample(1).first.question_id
     currentQuestion = Question.all.find(questionID)
     p currentPlayer
-    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion }
+    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, allUsers: allUsers }
   end
 
 

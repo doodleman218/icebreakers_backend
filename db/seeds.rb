@@ -13,9 +13,9 @@ User.destroy_all
 UserRoom.destroy_all
 
 
-Question.create(content:"what was your first job?")
-Question.create(content:"what was the story behind your first kiss?")
-Question.create(content:"what was an embarrasing memomry from gradeschool you still think about?")
+Question.create(content:"What was your first job?")
+Question.create(content:"What was the story behind your first kiss?")
+Question.create(content:"What is an embarrasing memory from gradeschool you still think about?")
 # Question.create(content:"what is your earliet memory?")
 # Question.create(content:"who was your first celebrity crush?")
 # Question.create(content:"1")
