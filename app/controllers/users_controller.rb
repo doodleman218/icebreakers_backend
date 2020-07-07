@@ -71,6 +71,11 @@ class UsersController < ApplicationController
     UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, allUsers: allUsers }
   end
 
+  def destroy
+    user = User.find(user_params[:id])
+    render json: user
+    user.destroy
+  end
 
   private
 
