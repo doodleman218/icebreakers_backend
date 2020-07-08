@@ -68,7 +68,7 @@ class UsersController < ApplicationController
     questionID = questionArray.sample(1).first.question_id
     currentQuestion = Question.all.find(questionID)
     p currentPlayer
-    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, allUsers: allUsers }
+    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, allUsers: allUsers, room: room }
   end
 
   def destroy
