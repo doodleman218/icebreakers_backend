@@ -47,7 +47,7 @@ class RoomsController < ApplicationController
 
   # def user_params
   #   params.require(:user).permit(:username)
-  #   # why this no work
+  #   # why tdhis no work
   # end
 
 
