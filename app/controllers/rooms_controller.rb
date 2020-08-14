@@ -19,7 +19,7 @@ class RoomsController < ApplicationController
       payload = {room_id: room.id}
       token = JWT.encode(payload, "hmac_secret", 'HS256') 
       render json: { room: room, jwt: token, user: user }, status: :created
-        
+      #room: this can change
     else
       render json: { errors: user.errors.messages }, status: :not_acceptable
     end
