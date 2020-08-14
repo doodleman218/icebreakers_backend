@@ -1,6 +1,5 @@
 require "jwt"
 
-
 class RoomsController < ApplicationController 
 
   def new
@@ -15,20 +14,14 @@ class RoomsController < ApplicationController
     join = UserRoom.create({"user_id" => user.id, "room_id" => room.id})
     question = Question.all.map {|questionObj| RoomQuestion.create({room_id: room.id, question_id: questionObj.id, is_active: true})}
     if room
-  
       payload = {room_id: room.id}
       token = JWT.encode(payload, "hmac_secret", 'HS256') 
       render json: { room: room, jwt: token, user: user }, status: :created
-      #room: this can change
     else
       render json: { errors: user.errors.messages }, status: :not_acceptable
     end
-
-  
-
   end
 
-  
   def destroy
     room = Room.find(room_params[:id])
     render json: room
@@ -37,7 +30,6 @@ class RoomsController < ApplicationController
     room.room_questions.destroy
     room.destroy
   end
-
 
   private
 
@@ -49,8 +41,5 @@ class RoomsController < ApplicationController
   #   params.require(:user).permit(:username)
   #   # why tdhis no work
   # end
-
-
-
 
 end
