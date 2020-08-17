@@ -2,9 +2,9 @@ class UsersController < ApplicationController
 
 
   def index
-    allUsers = User.all
+    all_users = User.all
     room = Room.find(user_params[:room])
-    UsersChannel.broadcast_to room, {allUsers: allUsers}
+    UsersChannel.broadcast_to room, {allUsers: all_users}
   end
 
   def test
@@ -22,50 +22,50 @@ class UsersController < ApplicationController
 
   
   def select
-    reshufflingUsers = false
-    reshufflingQuestions = false
+    reshuffling_users = false
+    reshuffling_questions = false
     room = Room.find(user_params[:room])
-    allUsers = room.users.all
+    all_users = room.users.all
     
-    updateUser = room.users.find_by(username: user_params[:currentPlayer])
-    updateUser.update(is_active: false)
-    updateQuestion = room.room_questions.find_by(question_id: question_params[:id])
-    updateQuestion.update(is_active: false)
-    userArray = room.users.select { |userObj| userObj.is_active === true }
+    update_user = room.users.find_by(username: user_params[:currentPlayer])
+    update_user.update(is_active: false)
+    update_question = room.room_questions.find_by(question_id: question_params[:id])
+    update_question.update(is_active: false)
+    user_array = room.users.select { |user_obj| user_obj.is_active === true }
     
-    if userArray.length === 0  
-      room.users.map { |userObj| userObj.update(is_active: true) } 
-      userArray = room.users
-      reshufflingUsers = true 
+    if user_array.length === 0  
+      room.users.map { |user_obj| user_obj.update(is_active: true) } 
+      user_array = room.users
+      reshuffling_users = true 
     end
 
-    currentPlayer = userArray.sample(1).first
-    questionArray = room.room_questions.all.select { |userObj| userObj.is_active === true }
+    current_player = user_array.sample(1).first
+    question_array = room.room_questions.all.select { |user_obj| user_obj.is_active === true }
   
-    if questionArray.length === 0
-      room.room_questions.map { |questionObj| questionObj.update(is_active: true) }
-      questionArray = room.room_questions
-      reshufflingQuestions = true
+    if question_array.length === 0
+      room.room_questions.map { |question_obj| question_obj.update(is_active: true) }
+      question_array = room.room_questions
+      reshuffling_questions = true
     end
 
-    questionID = questionArray.sample(1).first.question_id
-    currentQuestion = Question.find(questionID)
+    questionID = question_array.sample(1).first.question_id
+    current_question = Question.find(questionID)
    
-    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, reshufflingUsers: reshufflingUsers, reshufflingQuestions: reshufflingQuestions, allUsers: allUsers }
+    UsersChannel.broadcast_to room, { currentPlayer: current_player, currentQuestion: current_question, reshufflingUsers: reshuffling_users, reshufflingQuestions: reshuffling_questions, allUsers: all_users }
    
   end
 
   def start
     room = Room.find(user_params[:room])
-    allUsers = room.users.all
+    all_users = room.users.all
     room.update(game_started: true)
-    userArray = room.users.select { |roomObj| roomObj.is_active === true }
-    currentPlayer = userArray.sample(1).first
-    questionArray = room.room_questions.select { |roomObj| roomObj.is_active === true }
-    questionID = questionArray.sample(1).first.question_id
-    currentQuestion = Question.all.find(questionID)
-    p currentPlayer
-    UsersChannel.broadcast_to room, { currentPlayer: currentPlayer, currentQuestion: currentQuestion, allUsers: allUsers, room: room }
+    user_array = room.users.select { |room_obj| room_obj.is_active === true }
+    current_player = user_array.sample(1).first
+    question_array = room.room_questions.select { |room_obj| room_obj.is_active === true }
+    questionID = question_array.sample(1).first.question_id
+    current_question = Question.all.find(questionID)
+    p current_player
+    UsersChannel.broadcast_to room, { currentPlayer: current_player, currentQuestion: current_question, allUsers: all_users, room: room }
   end
 
   def destroy
