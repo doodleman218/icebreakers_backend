@@ -27,6 +27,5 @@ class RoomAuthController < ApplicationController
   end
 
 
-
 end
 

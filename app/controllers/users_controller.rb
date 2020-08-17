@@ -8,10 +8,8 @@ class UsersController < ApplicationController
   end
 
   def test
-    # users being broadcasted out
     users = User.all 
     room = Room.find(user_params[:room])
-    # UsersChannel.broadcast_to room, users
   end
 
   def create
@@ -38,8 +36,7 @@ class UsersController < ApplicationController
     if userArray.length === 0  
       room.users.map { |userObj| userObj.update(is_active: true) } 
       userArray = room.users
-      reshufflingUsers = true
-     
+      reshufflingUsers = true 
     end
 
     currentPlayer = userArray.sample(1).first
@@ -88,20 +85,3 @@ class UsersController < ApplicationController
   end
 
 end
-
-
-
-    # if user.save
-    #   serialized_data = ActiveModelSerializers::Adapter::Json.new(
-    #     UserSerializer.new(user)
-    #   ).serializable_hash
-    #   UsersChannel.broadcast_to room, serialized_data
-    #   head :ok
-    # end
-
-    # userArray = room.users.select do |roomObj|
-    #   byebug
-    #   if roomObj.is_active === true
-    #     return roomObj
-    #   end
-    # end
