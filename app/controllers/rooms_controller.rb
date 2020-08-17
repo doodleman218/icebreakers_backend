@@ -37,9 +37,4 @@ class RoomsController < ApplicationController
     params.require(:room).permit(:room_name, :password, :username, :is_active, :id)
   end
 
-  # def user_params
-  #   params.require(:user).permit(:username)
-  #   # why tdhis no work
-  # end
-
 end
