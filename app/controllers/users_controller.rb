@@ -48,7 +48,7 @@ class UsersController < ApplicationController
       reshuffling_questions = true
     end
 
-    questionID = question_array.sample(1).first.question_id
+    question_id = question_array.sample(1).first.question_id
     current_question = Question.find(questionID)
    
     UsersChannel.broadcast_to room, { currentPlayer: current_player, currentQuestion: current_question, reshufflingUsers: reshuffling_users, reshufflingQuestions: reshuffling_questions, allUsers: all_users }
@@ -62,7 +62,7 @@ class UsersController < ApplicationController
     user_array = room.users.select { |room_obj| room_obj.is_active === true }
     current_player = user_array.sample(1).first
     question_array = room.room_questions.select { |room_obj| room_obj.is_active === true }
-    questionID = question_array.sample(1).first.question_id
+    question_id = question_array.sample(1).first.question_id
     current_question = Question.all.find(questionID)
     p current_player
     UsersChannel.broadcast_to room, { currentPlayer: current_player, currentQuestion: current_question, allUsers: all_users, room: room }
