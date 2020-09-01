@@ -8,11 +8,9 @@ class RoomsController < ApplicationController
   end
   
   def create
-    p params
     user = User.create({"username" => room_params[:username], :is_active => true})
-    room = Room.create({"room_name" => room_params[:room_name], "password" => room_params[:password], "host_id" => user.id, "host_name" => user.username, :game_started => false})
-    join = UserRoom.create({"user_id" => user.id, "room_id" => room.id})
-    question = Question.all.map {|question_obj| RoomQuestion.create({room_id: room.id, question_id: question_obj.id, is_active: true})}
+    room = create_room(user)
+    
     if room
       payload = {room_id: room.id}
       token = JWT.encode(payload, "hmac_secret", 'HS256') 
@@ -24,17 +22,37 @@ class RoomsController < ApplicationController
 
   def destroy
     room = Room.find(room_params[:id])
-    render json: room
-    room.users.destroy
-    room.user_rooms.destroy
-    room.room_questions.destroy
     room.destroy
+
+    render json: room
   end
 
   private
 
   def room_params
-    params.require(:room).permit(:room_name, :password, :username, :is_active, :id)
+    params
+      .require(:room)
+      .permit(:room_name, :password, :username, :is_active, :id)
   end
 
+  def create_room(user)
+    room = Room.create({
+      "room_name" => room_params[:room_name],
+      "password" => room_params[:password],
+      "host_id" => user.id,
+      "host_name" => user.username
+    })
+    
+    UserRoom.create({"user_id" => user.id, "room_id" => room.id})
+    
+    Question.all.map do |question|
+      RoomQuestion.create({
+        room_id: room.id,
+        question_id: question.id,
+        is_active: true
+      })
+    end
+
+    room
+  end
 end
