@@ -6,8 +6,5 @@ class QuestionsController < ApplicationController
     render json: questions
   end
 
-  def update
-
-  end
-
+ 
 end

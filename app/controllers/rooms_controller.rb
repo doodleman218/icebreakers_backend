@@ -8,7 +8,6 @@ class RoomsController < ApplicationController
   end
   
   def create
-    p params
     user = User.create({"username" => room_params[:username], :is_active => true})
     room = Room.create({"room_name" => room_params[:room_name], "password" => room_params[:password], "host_id" => user.id, "host_name" => user.username, :game_started => false})
     join = UserRoom.create({"user_id" => user.id, "room_id" => room.id})
