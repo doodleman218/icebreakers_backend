@@ -20,7 +20,10 @@ class UsersController < ApplicationController
     user = User.find(user_params[:id])
   end
 
-  
+  def question_selector
+
+  end
+
   def select
     reshuffling_users = false
     reshuffling_questions = false
@@ -49,7 +52,12 @@ class UsersController < ApplicationController
     end
 
     rand_num = rand(10)
-    if rand_num.even? 
+    if rand_num.even? && question_array.length > 1
+      voting_questions = question_array.sample(2)
+      current_question_B = Question.find(voting_questions.first.question_id)
+      current_question_C = Question.find(voting_questions.second.question_id)
+      p "***********", current_question_B
+      p "^^^^^^^^^^^", current_question_C
       current_question = {content: "THIS IS A CHOICE"}
     else
       question_id = question_array.sample(1).first.question_id
