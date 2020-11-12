@@ -48,8 +48,13 @@ class UsersController < ApplicationController
       reshuffling_questions = true
     end
 
-    question_id = question_array.sample(1).first.question_id
-    current_question = Question.find(question_id)
+    rand_num = rand(10)
+    if rand_num.even? 
+      current_question = {content: "THIS IS A CHOICE"}
+    else
+      question_id = question_array.sample(1).first.question_id
+      current_question = Question.find(question_id)
+    end
    
     UsersChannel.broadcast_to room, { currentPlayer: current_player, currentQuestion: current_question, reshufflingUsers: reshuffling_users, reshufflingQuestions: reshuffling_questions, allUsers: all_users }
    
