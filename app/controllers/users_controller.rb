@@ -20,8 +20,10 @@ class UsersController < ApplicationController
     user = User.find(user_params[:id])
   end
 
-  def question_selector
-
+  def voting_select
+    vote = Question.find(user_params[:vote_id])
+    
+    p "******************", vote
   end
 
   def select
@@ -56,7 +58,6 @@ class UsersController < ApplicationController
       voting_questions = question_array.sample(2)
       voting_question_A = Question.find(voting_questions.first.question_id)
       voting_question_B = Question.find(voting_questions.second.question_id)
-      current_question = {content: "THIS IS A CHOICE"}
     else
       question_id = question_array.sample(1).first.question_id
       current_question = Question.find(question_id)
@@ -83,7 +84,6 @@ class UsersController < ApplicationController
     question_array = room.room_questions.select { |room_obj| room_obj.is_active === true }
     question_id = question_array.sample(1).first.question_id
     current_question = Question.all.find(question_id)
-    p current_player
     UsersChannel.broadcast_to room, { currentPlayer: current_player, currentQuestion: current_question, allUsers: all_users, room: room }
   end
 
@@ -96,7 +96,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:username, :id, :room, :currentPlayer, :currentQuestion, :reshufflingUsers)
+    params.require(:user).permit(:username, :id, :room, :currentPlayer, :currentQuestion, :reshufflingUsers, :vote_id)
   end
 
   def question_params
