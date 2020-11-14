@@ -22,8 +22,16 @@ class UsersController < ApplicationController
 
   def voting_select
     vote = Question.find(user_params[:vote_id])
-    
-    p "******************", vote
+    array_a = Array.new
+    array_b = Array.new
+    if array_a.length && array_b.length === 0
+      array_a << vote
+    elsif array_a[0].id === vote.id
+      array_a << vote
+    else 
+      array_b << vote
+    end
+    p "***********", array_a, array_b
   end
 
   def select
@@ -54,7 +62,8 @@ class UsersController < ApplicationController
     end
 
     rand_num = rand(10)
-    if rand_num.even? && question_array.length > 1
+    # if rand_num.even? || rand_num.odd? && question_array.length > 1
+    if rand_num && question_array.length > 1
       voting_questions = question_array.sample(2)
       voting_question_A = Question.find(voting_questions.first.question_id)
       voting_question_B = Question.find(voting_questions.second.question_id)
