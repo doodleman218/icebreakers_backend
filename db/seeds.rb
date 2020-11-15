@@ -11,6 +11,7 @@ RoomQuestion.destroy_all
 Room.destroy_all
 User.destroy_all
 UserRoom.destroy_all
+Vote.destroy_all
 
 
 Question.create(content:"What was your first job?")
@@ -26,7 +27,6 @@ Question.create(content:"Who was your first celebrity crush?")
 # Question.create(content:"6")
 # Question.create(content:"7")
 
-Vote.create(votes_A:[1,2,3], votes_B:[5,6,7])
 
 # RoomQuestion.create(room_id: Room.find_by(name: "Party").id, question_id: )
 
