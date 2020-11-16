@@ -22,18 +22,18 @@ class UsersController < ApplicationController
 
   def voting_select
     vote = Question.find(user_params[:vote_id])
-    collection = Vote.first
-    if collection.votes_A.length && collection.votes_B.length === 0
+    collection = Vote.find_by(room_id: user_params[:room])
+    if collection.votes_A.length === 0 && collection.votes_B.length === 0
       collection.votes_A << vote.id
       collection.save()
-    elsif array.votes_A[0].id === vote.id
+    elsif collection.votes_A[0] === vote.id
       collection.votes_A << vote.id
       collection.save()
     else 
       collection.votes_B << vote.id
       collection.save()
     end
-    p "***********", collection.votes_A, collection.votes_B
+    p "***********", collection
   end
 
   def select
