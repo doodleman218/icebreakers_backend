@@ -23,6 +23,9 @@ class UsersController < ApplicationController
   def voting_select
     vote = Question.find(user_params[:vote_id])
     collection = Vote.find_by(room_id: user_params[:room])
+    room = Room.find(user_params[:room])
+    current_player = room.users.find_by(username: user_params[:currentPlayer])
+    all_users = room.users.all
     if collection.votes_A.length === 0 && collection.votes_B.length === 0
       collection.votes_A << vote.id
       collection.save()
@@ -33,7 +36,27 @@ class UsersController < ApplicationController
       collection.votes_B << vote.id
       collection.save()
     end
-    p "***********", collection
+    
+    if collection.votes_A.count + collection.votes_B.count === all_users.count
+      if collection.votes_A.count > collection.votes_B.count
+        current_question = Question.find(collection.votes_A[0])
+      elsif collection.votes_A.count < collection.votes_B.count
+        current_question = Question.find(collection.votes_B[0])
+      end
+      p "&&&&&&&&&&&&&", collection
+      # collection.votes_A = []
+      # collection.votes_B = []
+      p "***********", collection
+      UsersChannel.broadcast_to room, {  
+      currentPlayer: current_player, 
+      currentQuestion: current_question,
+      votingQuestionA: "",
+      votingQuestionB: "", 
+      reshufflingUsers: false, 
+      reshufflingQuestions: false, 
+      allUsers: all_users 
+      }
+    end
   end
 
   def select
