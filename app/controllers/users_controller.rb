@@ -42,11 +42,16 @@ class UsersController < ApplicationController
         current_question = Question.find(collection.votes_A[0])
       elsif collection.votes_A.count < collection.votes_B.count
         current_question = Question.find(collection.votes_B[0])
+      elsif collection.votes_A.count === collection.votes_B.count
+        rand_num = rand(2)
+        if rand_num.even?
+          current_question = Question.find(collection.votes_A[0])
+        else 
+          current_question = Question.find(collection.votes_B[0])
+        end
       end
-      p "question", current_question
-      p "&&&&&&&&&&&&&", collection
+      p "************", current_question
       collection.update(votes_A: [], votes_B: [])
-      p "***********", collection
       UsersChannel.broadcast_to room, {  
       currentPlayer: current_player, 
       currentQuestion: current_question,
@@ -88,7 +93,7 @@ class UsersController < ApplicationController
 
     rand_num = rand(10)
     # if rand_num.even? || rand_num.odd? && question_array.length > 1
-    if rand_num && question_array.length > 1
+    if rand_num && question_array.length > 1 
       voting_questions = question_array.sample(2)
       voting_question_A = Question.find(voting_questions.first.question_id)
       voting_question_B = Question.find(voting_questions.second.question_id)
