@@ -43,9 +43,9 @@ class UsersController < ApplicationController
       elsif collection.votes_A.count < collection.votes_B.count
         current_question = Question.find(collection.votes_B[0])
       end
+      p "question", current_question
       p "&&&&&&&&&&&&&", collection
-      # collection.votes_A = []
-      # collection.votes_B = []
+      collection.update(votes_A: [], votes_B: [])
       p "***********", collection
       UsersChannel.broadcast_to room, {  
       currentPlayer: current_player, 
