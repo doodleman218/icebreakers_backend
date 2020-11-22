@@ -50,7 +50,6 @@ class UsersController < ApplicationController
           current_question = Question.find(collection.votes_B[0])
         end
       end
-      p "************", current_question
       collection.update(votes_A: [], votes_B: [])
       UsersChannel.broadcast_to room, {  
       currentPlayer: current_player, 
@@ -64,12 +63,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def voting_timer_select
+    p '*********YAAAAAYYYYYY*********'
+  end
+
   def select
     reshuffling_users = false
     reshuffling_questions = false
     room = Room.find(user_params[:room])
     all_users = room.users.all
-    
     update_user = room.users.find_by(username: user_params[:currentPlayer])
     update_user.update(is_active: false)
     update_question = room.room_questions.find_by(question_id: question_params[:id])
@@ -81,9 +83,10 @@ class UsersController < ApplicationController
       user_array = room.users
       reshuffling_users = true 
     end
-
+    
     current_player = user_array.sample(1).first
     question_array = room.room_questions.all.select { |user_obj| user_obj.is_active === true }
+  
   
     if question_array.length === 0
       room.room_questions.map { |question_obj| question_obj.update(is_active: true) }
@@ -92,7 +95,7 @@ class UsersController < ApplicationController
     end
 
     rand_num = rand(10)
-    # if rand_num.even? || rand_num.odd? && question_array.length > 1
+    # if rand_num.even? && question_array.length > 1
     if rand_num && question_array.length > 1 
       voting_questions = question_array.sample(2)
       voting_question_A = Question.find(voting_questions.first.question_id)
