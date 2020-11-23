@@ -64,8 +64,35 @@ class UsersController < ApplicationController
   end
 
   def voting_timer_select
-    p '*********YAAAAAYYYYYY*********'
-  end
+    collection = Vote.find_by(room_id: user_params[:room])
+    room = Room.find(user_params[:room])
+    current_player = room.users.find_by(username: user_params[:currentPlayer])
+    all_users = room.users.all
+    p "###############", collection
+    if collection.votes_A.count > collection.votes_B.count
+      current_question = Question.find(collection.votes_A[0])
+      # p "^^^^^^^^^^^^^^HERE^^^^^^^^^^^^", current_question
+    elsif collection.votes_A.count < collection.votes_B.count
+      current_question = Question.find(collection.votes_B[0])
+    elsif collection.votes_A.count === collection.votes_B.count
+      rand_num = rand(2)
+      if rand_num.even?
+        current_question = Question.find(collection.votes_A[0])
+      else 
+        current_question = Question.find(collection.votes_B[0])
+      end
+    end
+      collection.update(votes_A: [], votes_B: [])
+      UsersChannel.broadcast_to room, {  
+      currentPlayer: current_player, 
+      currentQuestion: current_question,
+      votingQuestionA: "",
+      votingQuestionB: "", 
+      reshufflingUsers: false, 
+      reshufflingQuestions: false, 
+      allUsers: all_users 
+      }
+end
 
   def select
     reshuffling_users = false
